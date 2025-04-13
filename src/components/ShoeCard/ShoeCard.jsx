@@ -36,11 +36,21 @@ const ShoeCard = ({
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          {variant=='on-sale' && <SaleFlag>Sale</SaleFlag>}
+          {variant=='new-release' && <JustReleasedFlag>Just Released</JustReleasedFlag>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <PriceWrapper>
+            <Price
+            style= {{
+              '--color': variant === 'on-sale' && COLORS.gray[700],
+              '--text-decoration': variant === 'on-sale' && 'line-through'
+            }}
+            >{formatPrice(price)}</Price>
+            {variant=='on-sale' && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
+          </PriceWrapper>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
@@ -53,26 +63,42 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
+  display: flex;
 `;
 
-const Wrapper = styled.article``;
-
-const ImageWrapper = styled.div`
-  position: relative;
+const Wrapper = styled.article`
+  display: flex;
+  flex-direction: column;
 `;
 
-const Image = styled.img``;
+const ImageWrapper = styled.div` 
+position: relative; 
+`;
+
+const Image = styled.img`
+ width: 100%;
+ border-radius: 8px 8px 4px 4px;;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.gray[900]};
 `;
+const PriceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: var(--color);
+  text-decoration: var(--text-decoration);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
@@ -81,6 +107,26 @@ const ColorInfo = styled.p`
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.primary};
+`;
+
+const SaleFlag = styled.div`
+  background-color: ${COLORS.primary};
+  color: white; 
+  padding: 3px 10px; 
+  position: absolute;
+  top: 5px; 
+  right: -5px;
+  border-radius: 2px;
+`;
+
+const JustReleasedFlag = styled.div`
+  background-color: ${COLORS.secondary};
+  color: white; 
+  padding: 3px 10px; 
+  position: absolute;
+  top: 5px; 
+  right: -5px;
+  border-radius: 2px;
 `;
 
 export default ShoeCard;
